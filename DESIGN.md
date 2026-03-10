@@ -14,7 +14,7 @@ The enrichment pipeline follows a straightforward flow: CSV upload → org-level
 
 **Rule-based search query generation.** Instead of using an LLM to generate Tavily search queries, I use org-type-specific templates. Foundations get queries targeting their investment offices; RIA/FIAs get queries checking whether they're service providers or allocators. This saves one LLM call per org (~70 calls) with no loss in search quality, since the query patterns are predictable.
 
-**Calibration anchors embedded in the scoring prompt.** The prompt includes 4 reference organizations (Rockefeller Foundation, PBUCC, Inherent Group, Meridian Capital) with their expected scores and reasoning. This grounds the model's scoring scale and prevents drift — without anchors, LLMs tend to cluster scores in the 5-7 range.
+**Calibration anchors embedded in the scoring prompt.** The prompt includes 4 reference organizations (Rockefeller Foundation, PBUCC, Inherent Group, Meridian Capital) with their expected scores and reasoning. This grounds the model's scoring scale and prevents drift, without anchors, LLMs tend to cluster scores in the 5-7 range.
 
 **Post-LLM validation layer.** After GPT-4o returns scores, rule-based checks catch anomalies: GP/service providers scoring above 3 on Sector Fit are overridden; Foundations/Pensions scoring unusually low are flagged for manual review; low-confidence + high-score combinations are flagged as unreliable. This adds a safety net that pure prompt engineering cannot guarantee.
 
